@@ -3,9 +3,7 @@ import ReactDOM from 'react-dom';
 import App from './App';
 
 const Root = () => (
-    <App />
+  <App />
 );
 
-
 ReactDOM.render(<Root />, document.getElementById('root'));
-

@@ -1,6 +1,6 @@
 import React from 'react';
 
-class App extends React.Component{
+class App extends React.Component {
   state = {
     posts: [],
   }
@@ -11,19 +11,16 @@ class App extends React.Component{
         this.setState({ posts: res });
     });
   }
-  render(){
-    return(
+  render() {
+    return (
       <div>
         <ul>
-          {this.state.posts.map(post => <li key={post.id}>{post.title}</li>)}
+            {this.state.posts.map(post => <li key={post.id}>{post.title}</li>)}
         </ul>
       </div>
     );
   }
+
 };
-
-
-
-
 
 export default App;
