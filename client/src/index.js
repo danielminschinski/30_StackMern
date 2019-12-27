@@ -13,7 +13,6 @@ const Root = () => (
       <App />
     </Router>
   </Provider>
-    
 );
 
 ReactDOM.render(<Root />, document.getElementById('root'));
