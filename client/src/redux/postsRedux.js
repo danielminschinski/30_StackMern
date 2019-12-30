@@ -1,32 +1,24 @@
+import axios from 'axios';
+import { API_URL } from '../config';
+
 //SELECTORS
 export const getPosts = ({ posts }) => posts;
-//ACTIONS
-
-
-export const loadPosts = payload => ({ payload, type: LOAD_POSTS });
+export const countPosts = ({ posts }) => posts.length;
 
 //action name creator
 const reducerName = 'posts';
 const createActionName = name => `app/${reducerName}/${name}`;
 
+
+//ACTIONS
+export const LOAD_POSTS = createActionName('LOAD_POSTS');
+export const loadPosts = payload => ({ payload, type: LOAD_POSTS });
+
+
 // initial state
 
 const initialState = [];
 
-// thunks
-export const loadPostsRequest = () => {
-    return dispatch => {
-        console.log('Request started...');
-        setTimeout(() => {
-            const arr = [{ id: 'a3fssdc1', title: 'Test', content: 'Lorem Ipsum'}];
-            dispatch(loadPosts(arr));
-            console.log('Request finished after 2sec!');
-        }, 2000);
-    };
-};
-
-
-export const LOAD_POSTS = createActionName('LOAD_POSTS');
 // reducer
 
 export default function reducer(statePart = initialState, action = {}){
@@ -36,4 +28,17 @@ export default function reducer(statePart = initialState, action = {}){
         default:
             return statePart;
     }
+};
+
+// thunks
+export const loadPostsRequest = () => {
+    return async dispatch => {
+        
+        try {
+            let res = await axios.get(`${API_URL}/posts`);
+            dispatch(loadPosts(res.data));
+        } catch(e){
+            console.log(e.message);
+        }
+    };
 };
