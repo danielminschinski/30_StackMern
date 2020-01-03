@@ -5,6 +5,7 @@ import PostsList from '../PostsList/PostsList';
 
 import Spinner from '../../common/Spinner/Spinner';
 //import { request } from 'express';
+import Alert from '../../common/Alert/Alert';
 
 class Posts extends React.Component{
 
@@ -16,13 +17,19 @@ class Posts extends React.Component{
     render(){
         const { posts, request } = this.props;
 
-        return(
-            <div>
-                {request.pending && <Spinner />}
-                <PostsList posts={posts} />
-                
-            </div>
-        );
+        if(request.pending === false && request.error !== null && posts.length > 0){
+            return <Alert variant='error' children={''}>Error: {request.error}</Alert>
+        } else if(request.pending === false && request.success === true && posts.length > 0){
+            return (
+                <div>
+                    <PostsList posts={posts} />
+                </div>
+            )
+        } else if(request.pending === true || request.success === null){
+            return <Spinner />
+        } else if(request.pending === false && request.success === true && posts.length === 0){
+            return <Alert variant='info' children={''}>No posts</Alert>
+        };
     }
 };
 
