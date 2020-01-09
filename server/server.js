@@ -11,6 +11,7 @@ const app = express();
 const postRoutes = require('./routes/post.routes');
 
 app.use(cors());
+app.use(helmet());
 app.use(express.urlencoded({ extended: true}));
 app.use(express.json());
 app.use('/api', postRoutes);
@@ -30,4 +31,3 @@ app.listen(config.PORT, function(){
     console.log('Server is running on Port:', config.PORT);
 });
 
-app.use(helmet());

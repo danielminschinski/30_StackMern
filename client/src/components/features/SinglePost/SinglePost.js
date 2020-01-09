@@ -45,7 +45,7 @@ SinglePost.propTypes = {
             content: PropTypes.string.isRequired,
         })
     ),
-    loadSiglePost: PropTypes.func.isRequired,
+    loadSinglePost: PropTypes.func.isRequired,
     resetRequest: PropTypes.func.isRequired,
 };
 
