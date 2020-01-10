@@ -14,7 +14,7 @@
     "postinstall": "run-p install:*"
   },
   "dependencies": {
-    "axios": "0.18.0",
+    "axios": "0.18.1",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "helmet": "3.18.0",
