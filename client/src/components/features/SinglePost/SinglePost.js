@@ -31,7 +31,9 @@ class SinglePost extends React.Component {
             return (
                 <div>
                     <PageTitle>{posts.title}</PageTitle>
-                    <p>Author: {posts.author}</p>
+                        <div>
+                            <p>Author: {posts.author}</p>
+                        </div>
                     <HtmlBox>{posts.content}</HtmlBox>
                 </div>
             );
