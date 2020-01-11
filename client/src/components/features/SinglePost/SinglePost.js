@@ -31,6 +31,7 @@ class SinglePost extends React.Component {
             return (
                 <div>
                     <PageTitle>{posts.title}</PageTitle>
+                    <p>Author: {posts.author}</p>
                     <HtmlBox>{posts.content}</HtmlBox>
                 </div>
             );
@@ -39,6 +40,14 @@ class SinglePost extends React.Component {
 };
 
 SinglePost.propTypes = {
+    posts: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+            title: PropTypes.string.isRequired,
+            content: PropTypes.string.isRequired,
+            author: PropTypes.string.isRequired,
+        })
+    ),
     loadSinglePost: PropTypes.func.isRequired,
     resetRequest: PropTypes.func.isRequired,
 };
