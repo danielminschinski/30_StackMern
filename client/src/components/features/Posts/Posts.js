@@ -1,5 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import PostsList from '../PostsList/PostsList';
 
@@ -44,4 +45,5 @@ Posts.propTypes = {
     loadPosts: PropTypes.func.isRequired,
 };
 
-export default Posts;
+
+export default withRouter(props => <Posts {...props} />);

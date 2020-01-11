@@ -1,5 +1,6 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
+import { withRouter } from 'react-router-dom';
 
 import Spinner from '../../common/Spinner/Spinner';
 import Alert from '../../common/Alert/Alert';
@@ -38,15 +39,8 @@ class SinglePost extends React.Component {
 };
 
 SinglePost.propTypes = {
-    posts: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            title: PropTypes.string.isRequired,
-            content: PropTypes.string.isRequired,
-        })
-    ),
     loadSinglePost: PropTypes.func.isRequired,
     resetRequest: PropTypes.func.isRequired,
 };
 
-export default SinglePost; 
+export default withRouter(props => <SinglePost {...props} />);
