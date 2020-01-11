@@ -46,5 +46,9 @@ Posts.propTypes = {
     loadPosts: PropTypes.func.isRequired,
 };
 
+Posts.defaultProps = {
+    initialPage: 1,
+  
+};
 
 export default withRouter(props => <Posts {...props} />);
