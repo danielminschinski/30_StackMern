@@ -1,8 +1,11 @@
 import React from 'react';
+import PageTitle from '../../common/PageTitle/PageTitle';
+import PostForm from '../../features/PostForm/PostForm';
 
 const AddPostPage = () => (
     <div>
-        <h1>Add Post</h1>
+        <PageTitle>Add Post</PageTitle>
+        <PostForm />
     </div>
 );
 
