@@ -9,6 +9,7 @@ import Editor from 'react-medium-editor';
 import 'medium-editor/dist/css/medium-editor.css';
 import 'medium-editor/dist/css/themes/default.css';
 
+
 class PostForm extends React.Component{
     state = {
         post: {
@@ -18,19 +19,37 @@ class PostForm extends React.Component{
         }
     }
 
+    
+    handleChange = (e) => {
+        const { post } = this.state;
+        this.setState({ post: { ...post, [e.target.name]: e.target.value } });
+    }
+
+    handleEditor = (text) => {
+        const { post } = this.state;
+        this.setState({ post: { ...post, content: text }});
+    }
+
     render(){
         const { post } = this.state;
+        const { handleChange, handleEditor } = this;
+    
 
         return (
-            <div>
+            <form>
+
                 <TextField
                     label="Title"
                     value={post.title}
+                    onChange={handleChange}
+                    name="title"
                 />
 
                 <TextField
                     label="Author"
                     value={post.author}
+                    onChange={handleChange}
+                    name="author"
                 />
 
                 <SectionTitle>Edit post content</SectionTitle>
@@ -38,12 +57,13 @@ class PostForm extends React.Component{
                 <Editor
                     className="content-editor"
                     text={post.content}
+                    onChange={handleEditor}
                     options={{ placeholder: false, toolbar: { buttons: ['bold', 'italic', 'underline', 'h2', 'h3']}}}
                 />
 
                 <Button variant="primary">Add post</Button>
 
-            </div>
+            </form>
         );
     }
 };
