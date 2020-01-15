@@ -9,6 +9,8 @@ import Editor from 'react-medium-editor';
 import 'medium-editor/dist/css/medium-editor.css';
 import 'medium-editor/dist/css/themes/default.css';
 
+import './PostForm.scss';
+
 
 class PostForm extends React.Component{
     state = {
