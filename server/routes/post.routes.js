@@ -15,4 +15,6 @@ router.route('/posts').post(PostController.addPost);
 // get posts by range
 router.route('/posts/range/:startAt/:limit').get(PostController.getPostsByRange);
 
+
+
 module.exports = router;
