@@ -41,7 +41,7 @@ class PostForm extends React.Component{
 
     addPost = (e) => {
         const { addPost } = this.props;
-        const { post } = this.props;
+        const { post } = this.state;
 
         e.preventDefault();
         addPost(post);
