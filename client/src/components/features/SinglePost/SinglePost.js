@@ -1,6 +1,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
+import { FacebookProvider, Comments } from 'react-facebook';
 
 import Spinner from '../../common/Spinner/Spinner';
 import Alert from '../../common/Alert/Alert';
@@ -15,7 +16,7 @@ class SinglePost extends React.Component {
     }
 
     render(){
-        const { posts, request } = this.props;
+        const { posts, request, location } = this.props;
 
         if(posts === null && request.pending === true){
             return <Spinner />
@@ -35,6 +36,9 @@ class SinglePost extends React.Component {
                             <p>Author: {posts.author}</p>
                         </div>
                     <HtmlBox>{posts.content}</HtmlBox>
+                    <FacebookProvider appId="1023647898019064">
+                        <Comments href={`http://localhost:3000/${location.pathname}`} />
+                    </FacebookProvider>
                 </div>
             );
         };

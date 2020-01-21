@@ -3,7 +3,7 @@ import SinglePostContainer from '../../features/SinglePost/SinglePostContainer';
 
 const SinglePostPage = () => (
     <div>
-        <SinglePostContainer />
+        <SinglePostContainer />    
     </div>
 );
 
