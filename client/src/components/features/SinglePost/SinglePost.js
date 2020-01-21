@@ -1,7 +1,8 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { withRouter } from 'react-router-dom';
-import { FacebookProvider, Comments } from 'react-facebook';
+import { FacebookProvider, Comments, ShareButton } from 'react-facebook';
+import { BASE_URL } from '../../../config';
 
 import Spinner from '../../common/Spinner/Spinner';
 import Alert from '../../common/Alert/Alert';
@@ -35,9 +36,15 @@ class SinglePost extends React.Component {
                         <div>
                             <p>Author: {posts.author}</p>
                         </div>
+                            <FacebookProvider appId="1023647898019064">
+                                <ShareButton href={`${BASE_URL}/${location.pathname}`}>
+                                    Share on facebook
+                                </ShareButton>
+                            </FacebookProvider>
+
                     <HtmlBox>{posts.content}</HtmlBox>
                     <FacebookProvider appId="1023647898019064">
-                        <Comments href={`http://localhost:3000/${location.pathname}`} />
+                        <Comments href={`${BASE_URL}/${location.pathname}`} />
                     </FacebookProvider>
                 </div>
             );

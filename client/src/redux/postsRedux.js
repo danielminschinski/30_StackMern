@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL, BASE_URL } from '../config';
 
 //SELECTORS
 export const getPosts = ({ posts }) => posts.data;
@@ -83,7 +83,7 @@ export const loadPostsRequest = () => {
       dispatch(startRequest());
       try {
   
-        let res = await axios.get(`${API_URL}/posts`);
+        let res = await axios.get(`${BASE_URL}${API_URL}/posts`);
         await new Promise((resolve, reject) => setTimeout(resolve, 2000));
         dispatch(loadPosts(res.data));
         dispatch(endRequest());
@@ -100,7 +100,7 @@ export const loadPostsRequest = () => {
 
         dispatch(startRequest());
         try {
-            let res = await axios.get(`${API_URL}/posts/${id}`);
+            let res = await axios.get(`${BASE_URL}${API_URL}/posts/${id}`);
             dispatch(loadSinglePost(res.data));
             dispatch(endRequest());
         }catch(e){
@@ -114,7 +114,7 @@ export const loadPostsRequest = () => {
 
         dispatch(startRequest());
         try{
-            await axios.post(`${API_URL}/posts`, post);
+            await axios.post(`${BASE_URL}${API_URL}/posts`, post);
             await new Promise((resolve, reject) => setTimeout(resolve, 2000));
             dispatch(endRequest());
         }catch(e){
@@ -132,7 +132,7 @@ export const loadPostsRequest = () => {
             const startAt = (page - 1) * postsPerPage
             const limit = postsPerPage;
 
-            let res = await axios.get(`${API_URL}/posts/range/${startAt}/${limit}`);
+            let res = await axios.get(`${BASE_URL}${API_URL}/posts/range/${startAt}/${limit}`);
             await new Promise((resolve, reject) => setTimeout(resolve, 2000));
 
             const payload = {
