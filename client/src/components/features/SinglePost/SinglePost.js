@@ -33,19 +33,20 @@ class SinglePost extends React.Component {
             return (
                 <div>
                     <PageTitle>{posts.title}</PageTitle>
-                        <div>
+                    <div>
                             <p>Author: {posts.author}</p>
-                        </div>
                             <FacebookProvider appId="1023647898019064">
                                 <ShareButton href={`${BASE_URL}/${location.pathname}`}>
                                     Share on facebook
                                 </ShareButton>
                             </FacebookProvider>
-
+                    </div>
                     <HtmlBox>{posts.content}</HtmlBox>
-                    <FacebookProvider appId="1023647898019064">
-                        <Comments href={`${BASE_URL}/${location.pathname}`} />
-                    </FacebookProvider>
+                    <div>
+                        <FacebookProvider appId="1023647898019064">
+                            <Comments href={`${BASE_URL}/${location.pathname}`} />
+                        </FacebookProvider>
+                    </div>
                 </div>
             );
         };
