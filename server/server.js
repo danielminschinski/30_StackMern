@@ -17,17 +17,17 @@ app.use(express.static(path.join(__dirname, '/../client/build')));
 
 app.use(cors());
 app.use(helmet());
-app.use(express.urlencoded({ extended: true}));
+app.use(express.urlencoded({ extended: false}));
 app.use(express.json());
 app.use('/api', postRoutes);
 
-app.use((req, next) => {
+app.use((req, res, next) => {
     sanitize(req.body);
     next();
 });
 
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname + '/..client/build/index/html'));
+    res.sendFile(path.join(__dirname + '/../client/build/index.html'));
 });
 
 // connects our back end code with the database

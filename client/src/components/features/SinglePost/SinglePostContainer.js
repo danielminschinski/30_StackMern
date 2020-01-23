@@ -3,8 +3,9 @@ import { getSinglePost, loadSinglePostRequest, getRequest, resetRequest } from '
 import SinglePost from './SinglePost';
 
 const mapStateToProps = state => ({
-    posts: getSinglePost(state),
     request: getRequest(state),
+    posts: getSinglePost(state),
+    
 });
 
 const mapDispatchToProps = dispatch => ({
