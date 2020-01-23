@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../config';
+import { API_URL, BASE_URL } from '../config';
 
 // SELECTORS
 export const getPosts = ({ posts }) => posts.data;
@@ -81,7 +81,7 @@ export const loadPostsRequest = () => {
 
         dispatch(startRequest());
         try {
-            let res = await axios.get(`${API_URL}/posts`);
+            let res = await axios.get(`${BASE_URL}${API_URL}/posts`);
             dispatch(loadPosts(res.data));
             dispatch(endRequest());
         } catch(e) {
