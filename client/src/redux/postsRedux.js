@@ -138,7 +138,7 @@ export const addPostRequest = (post) => {
 
         try {
 
-            let res = await axios.post(`${BASE_URL}${API_URL}/posts`, post);
+            await axios.post(`${BASE_URL}${API_URL}/posts`, post);
             dispatch(endRequest());
 
         } catch(e) {
