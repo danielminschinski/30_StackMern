@@ -9,7 +9,7 @@ import Alert from '../../common/Alert/Alert';
 import HtmlBox from '../../common/HtmlBox/HtmlBox';
 import PageTitle from '../../common/PageTitle/PageTitle';
 
-
+import './SinglePost.scss';
 
 class SinglePost extends React.Component {
     componentDidMount() {
@@ -36,19 +36,19 @@ class SinglePost extends React.Component {
             
         } else if(request.pending === false && request.success === true && posts.length !== 0) {
             return (
-                <div>
+                <div className='single-post-body'>
                     <PageTitle>{posts.title}</PageTitle>
-                    <div>
+                    <div className='share-btn-section'>
                         <p>Author: {posts.author}</p>
                         <FacebookProvider appId='1023647898019064'>
-                            <ShareButton href={`${BASE_URL}/${location.pathname}`}>
+                            <ShareButton href={`${BASE_URL}/${location.pathname}`} className='share-button'>
                                 Share on Facebook
                             </ShareButton>
                         </FacebookProvider>
                     </div>
                     
                     <HtmlBox>{posts.content}</HtmlBox>
-                    <div>
+                    <div className='fb-comment-section'>
                         <FacebookProvider appId='1023647898019064'>
                             <Comments href={`${BASE_URL}/${location.pathname}`} />
                         </FacebookProvider>
