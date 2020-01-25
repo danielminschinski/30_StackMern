@@ -41,7 +41,7 @@ class SinglePost extends React.Component {
                     <div className='share-btn-section'>
                         <p>Author: {posts.author}</p>
                         <FacebookProvider appId='1023647898019064'>
-                            <ShareButton href={`${BASE_URL}/${location.pathname}`} className='share-button'>
+                            <ShareButton href={`${BASE_URL}${location.pathname}`} className='share-button'>
                                 Share on Facebook
                             </ShareButton>
                         </FacebookProvider>
@@ -50,7 +50,7 @@ class SinglePost extends React.Component {
                     <HtmlBox>{posts.content}</HtmlBox>
                     <div className='fb-comment-section'>
                         <FacebookProvider appId='1023647898019064'>
-                            <Comments href={`${BASE_URL}/${location.pathname}`} />
+                            <Comments href={`${BASE_URL}${location.pathname}`} />
                         </FacebookProvider>
                     </div>
                 </div>
@@ -61,14 +61,7 @@ class SinglePost extends React.Component {
 };
 
 SinglePost.propTypes = {
-    posts: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            title: PropTypes.string.isRequired,
-            content: PropTypes.string.isRequired,
-            author: PropTypes.string.isRequired,
-        })
-    ),
+    
     loadSinglePost: PropTypes.func.isRequired,
     resetRequest: PropTypes.func.isRequired,
 };
