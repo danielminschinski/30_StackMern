@@ -1,148 +1,182 @@
 import axios from 'axios';
-import { API_URL, BASE_URL } from '../config';
+import { API_URL } from '../config';
+import { startRequest, endRequest, errorRequest } from './requestReducer';
 
-// SELECTORS
+/* SELECTORS */
 export const getPosts = ({ posts }) => posts.data;
-export const getSinglePost = ({ posts }) => posts.singlePost;
 export const getPages = ({ posts }) => Math.ceil(posts.amount / posts.postsPerPage);
-export const countPosts = ({ posts }) => posts.data.length;
-export const getRequest = ({ posts }) => posts.request;
-export const presentPage = ({ posts }) => posts.presentPage;
+export const getCurentPages = ({ posts }) => posts.presentPage;
+export const getCurentPost = ({ posts }) => posts.curentPost;
+export const getRandomPost = ({ posts }) => posts.randomPost;
+export const getEditPost = ({ posts }) => posts.editPost;
+export const getPostsCount = ({ posts }) => posts.data.length;
 
-//action name creator
+// action name creator
 const reducerName = 'posts';
 const createActionName = name => `app/${reducerName}/${name}`;
 
-
-//ACTIONS   
+/* ACTIONS */
 export const LOAD_POSTS = createActionName('LOAD_POSTS');
-export const LOAD_SINGLE_POST = createActionName('LOAD_SINGLE_POST');
 export const LOAD_POSTS_PAGE = createActionName('LOAD_POSTS_PAGE');
-export const START_REQUEST = createActionName('START_REQUEST');
-export const END_REQUEST = createActionName('END_REQUEST');
-export const ERROR_REQUEST = createActionName('ERROR_REQUEST');
-export const RESET_REQUEST = createActionName('RESET_REQUEST');
+export const LOAD_CURENT_POST = createActionName('LOAD_CURENT_POST');
+export const LOAD_RANDOM_POST = createActionName('LOAD_RANDOM_POST');
+export const LOAD_EDIT_POST = createActionName('LOAD_EDIT_POST');
 
 export const loadPosts = payload => ({ payload, type: LOAD_POSTS });
-export const loadSinglePost = payload => ({ payload, type: LOAD_SINGLE_POST});
 export const loadPostsByPage = payload => ({ payload, type: LOAD_POSTS_PAGE });
-export const startRequest = () => ({ type: START_REQUEST });
-export const endRequest = () => ({ type: END_REQUEST });
-export const errorRequest = error => ({ error, type: ERROR_REQUEST});
-export const resetRequest = () => ({ type: RESET_REQUEST });
+export const loadCurentPost = payload => ({ payload, type: LOAD_CURENT_POST });
+export const loadRandomPost = payload => ({ payload, type: LOAD_RANDOM_POST });
+export const loadEditPost = payload => ({ payload, type: LOAD_EDIT_POST });
 
-//INITIAL STATE
-const initialState = {
-    data: [],
-    singlePost: [],
-    request: {
-        pending: false,
-        error: null,
-        success: null,
-    },
-    amount: 0,
-    postsPerPage: 5,
-    presentPage: 1,
-};
-
-
-//REDUCER
-export default function reducer(statePart = initialState, action = {}) {
-    switch (action.type) {
-        case LOAD_POSTS:
-            return { ...statePart, data: action.payload };
-        case LOAD_SINGLE_POST:
-            return { ...statePart, singlePost: action.payload };
-        case START_REQUEST:
-            return { ...statePart, request: { pending: true, error: null, success: null }};
-        case END_REQUEST:
-            return { ...statePart, request: { pending: false, error: null, success: true }};
-        case ERROR_REQUEST:
-            return { ...statePart, request: { pending: false, error: action.error, success: false }}
-        case RESET_REQUEST:
-            return { ...statePart, request: { pending: false, error: null, success: null }};
-        case LOAD_POSTS_PAGE:
-            return {
-                ...statePart,
-                postsPerPage: action.payload.postsPerPage,
-                presentPage: action.payload.presentPage,
-                amount: action.payload.amount,
-                data: [...action.payload.posts],
-            };
-        default:
-            return statePart;
-    }
-};
-
-
-//THUNKS
+/* THUNKS */
 export const loadPostsRequest = () => {
-    return async dispatch => {
-
-        dispatch(startRequest());
-        try {
-            const res = await axios.get(`${BASE_URL}${API_URL}/posts`);
-            dispatch(loadPosts(res.data));
-            dispatch(endRequest());
-        } catch(e) {
-            dispatch(errorRequest(e.message));
-        }
-    };
+  return async dispatch => {
+    dispatch(startRequest('requestPost'));
+    try {
+      const res = await axios.get(`${API_URL}/posts`);
+      dispatch(loadPosts(res.data));
+      dispatch(endRequest('requestPost'));
+    } catch (e) {
+      dispatch(errorRequest(e.message, 'requestPost'));
+    }
+  };
 };
 
-export const loadSinglePostRequest = (id) => {
-    return async dispatch => {
+export const loadPostsByPageRequest = (page, postsPerPage = 10) => {
+  return async dispatch => {
+    dispatch(startRequest('requestPost'));
+    try {
+      const startAt = (page - 1) * postsPerPage;
+      const limit = postsPerPage;
 
-        dispatch(startRequest());
+      const res = await axios.get(`${API_URL}/posts/range/${startAt}/${limit}`);
+      // await new Promise(resolve => setTimeout(resolve, 10));
 
-        try {
-            const res = await axios.get(`${BASE_URL}${API_URL}/posts/${id}`);
-            dispatch(loadSinglePost(res.data));
-            dispatch(endRequest());
-        } catch(e) {
-            dispatch(errorRequest(e.message));
-        };
-    };
+      const payload = {
+        posts: res.data.posts,
+        amount: res.data.amount,
+        postsPerPage,
+        presentPage: page,
+      };
+
+      dispatch(loadPostsByPage(payload));
+      dispatch(endRequest('requestPost'));
+    } catch (e) {
+      dispatch(errorRequest(e.message, 'requestPost'));
+    }
+  };
 };
 
-export const loadPostsByPageRequest = (page, postsPerPage) => {
-    return async dispatch => {
-        dispatch(startRequest());
+export const loadCurentPostRequest = id => {
+  return async dispatch => {
+    dispatch(startRequest('requestPost'));
+    try {
+      const res = await axios.get(`${API_URL}/posts/${id}`);
+      dispatch(loadCurentPost(res.data));
+      dispatch(endRequest('requestPost'));
+    } catch (e) {
+      dispatch(errorRequest(e.message, 'requestPost'));
+    }
+  };
+};
 
-        try {
-            const startAt = (page - 1) * postsPerPage;
-            const limit = postsPerPage;
+export const loadRandomPostRequest = () => {
+  return async dispatch => {
+    dispatch(startRequest('requestPost'));
+    try {
+      const res = await axios.get(`${API_URL}/posts/random`);
+      dispatch(loadRandomPost(res.data));
+      dispatch(endRequest('requestPost'));
+    } catch (e) {
+      dispatch(errorRequest(e.message, 'requestPost'));
+    }
+  };
+};
 
-            const res = await axios.get(`${BASE_URL}${API_URL}/posts/range/${startAt}/${limit}`);
-            
-            const payload = {
-                posts: res.data.posts,
-                amount: res.data.amount,
-                postsPerPage,
-                presentPage: page,
-            };
+export const loadEditPostRequest = id => {
+  return async dispatch => {
+    dispatch(startRequest('requestPost'));
+    try {
+      const res = await axios.get(`${API_URL}/posts/${id}`);
+      dispatch(loadEditPost(res.data));
+      dispatch(endRequest('requestPost'));
+    } catch (e) {
+      dispatch(errorRequest(e.message, 'requestPost'));
+    }
+  };
+};
 
-            dispatch(loadPostsByPage(payload));
-            dispatch(endRequest());
+export const addPostRequest = post => {
+  return async dispatch => {
+    dispatch(startRequest('requestForm'));
+    try {
+      await axios.post(`${API_URL}/posts`, post);
+      dispatch(endRequest('requestForm'));
+    } catch (e) {
+      dispatch(errorRequest(e.message, 'requestForm'));
+    }
+  };
+};
 
-        } catch(e) {
-            dispatch(errorRequest(e.message));
-        }
-    };
+export const editPostRequest = post => {
+  return async dispatch => {
+    dispatch(startRequest('requestForm'));
+    try {
+      await axios.put(`${API_URL}/posts/${post._id}`, post);
+      dispatch(endRequest('requestForm'));
+    } catch (e) {
+      dispatch(errorRequest(e.message, 'requestForm'));
+    }
+  };
+};
+export const ratingRequest = (post, ratingType) => {
+  return async dispatch => {
+    dispatch(startRequest('requestRating'));
+    try {
+      if (ratingType === 'add') post.rating++;
+      if (ratingType === 'sub' && post.rating > 0) post.rating--;
+      await axios.put(`${API_URL}/posts/${post._id}`, post);
+
+      dispatch(endRequest('requestRating'));
+    } catch (e) {
+      dispatch(errorRequest(e.message, 'requestRating'));
+    }
+  };
+};
+
+/* INITIAL STATE */
+
+const initialState = {
+  data: [],
+  curentPost: {},
+  editPost: {},
+  randomPost: {},
+  amount: 0,
+  postsPerPage: 10,
+  presentPage: 1,
+};
+
+/* REDUCER */
+
+export default function reducer(statePart = initialState, action = {}) {
+  switch (action.type) {
+    case LOAD_POSTS:
+      return { ...statePart, data: action.payload };
+    case LOAD_POSTS_PAGE:
+      return {
+        ...statePart,
+        postsPerPage: action.payload.postsPerPage,
+        presentPage: action.payload.presentPage,
+        amount: action.payload.amount,
+        data: [...action.payload.posts],
+      };
+    case LOAD_CURENT_POST:
+      return { ...statePart, curentPost: action.payload };
+    case LOAD_RANDOM_POST:
+      return { ...statePart, randomPost: action.payload };
+    case LOAD_EDIT_POST:
+      return { ...statePart, editPost: action.payload };
+    default:
+      return statePart;
+  }
 }
-
-export const addPostRequest = (post) => {
-    return async dispatch => {
-
-        dispatch(startRequest());
-
-        try {
-
-            await axios.post(`${BASE_URL}${API_URL}/posts`, post);
-            dispatch(endRequest());
-
-        } catch(e) {
-            dispatch(errorRequest(e.message));
-        }
-    };
-};

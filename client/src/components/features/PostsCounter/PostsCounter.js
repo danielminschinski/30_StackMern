@@ -1,23 +1,12 @@
 import React from 'react';
+import Alert from '../../common/Alert/Alert';
 
 class PostsCounter extends React.Component {
-    render() {
-        let { postsCount } = this.props;
-
-        if(postsCount === 0) {
-            return (
-                <div>
-                    Posts amount: no posts
-                </div>
-            )
-        } else {
-            return (
-                <div>
-                    Posts amount: {postsCount}
-                </div>
-            );
-        };        
-    }
-};
+  render() {
+    const { count, request } = this.props;
+    const counter = count > 0 ? <>{count} Posts</> : <Alert variant="info"> No posts </Alert>;
+    return <div>{!request.requestPost.pending && counter}</div>;
+  }
+}
 
 export default PostsCounter;

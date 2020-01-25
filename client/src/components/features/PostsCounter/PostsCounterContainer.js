@@ -1,11 +1,11 @@
-import { countPosts } from '../../../redux/postsRedux';
 import { connect } from 'react-redux';
+import { getPostsCount } from '../../../redux/postsRedux';
+import { getRequest } from '../../../redux/requestReducer';
 import PostsCounter from './PostsCounter';
 
 const mapStateToProps = state => ({
-    postsCount: countPosts(state)
+  count: getPostsCount(state),
+  request: getRequest(state),
 });
 
-
-
-export default connect(mapStateToProps, null)(PostsCounter);
+export default connect(mapStateToProps)(PostsCounter);

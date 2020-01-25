@@ -48,7 +48,7 @@ const loadTestData = async () => {
             console.log('Test data has been successfully loaded');
         }
     }   catch (err){
-        console.log('Coulnd\'t load test data', err);
+        console.log("Couldn't load test data", err);
     }
 };
 

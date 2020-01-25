@@ -1,66 +1,59 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { withRouter } from 'react-router-dom';
 
 import PostsList from '../PostsList/PostsList';
+import Pagination from '../../common/Pagination/Pagination';
 import Spinner from '../../common/Spinner/Spinner';
 import Alert from '../../common/Alert/Alert';
-import Pagination from '../../common/Pagination/Pagination';
 
 class Posts extends React.Component {
+  componentDidMount() {
+    const { loadPostsByPage, initialPage = 1, postsPerPage } = this.props;
 
-    componentDidMount() {
-        const { loadPostsByPage, initialPage, postsPerPage } = this.props;
-        loadPostsByPage(initialPage, postsPerPage);
+    loadPostsByPage(initialPage, postsPerPage);
+  }
+
+  loadPostsPage = page => {
+    const { loadPostsByPage, postsPerPage } = this.props;
+    loadPostsByPage(page, postsPerPage);
+  };
+
+  render() {
+    const { loadPostsPage } = this;
+    const { posts, request, pages, presentPage, pagination = true } = this.props;
+    const { pending, error, success } = request.requestPost;
+    let postsView;
+
+    if (pending === false) {
+      if (success === true) {
+        postsView = (
+          <>
+            <PostsList posts={posts} />
+            {pagination && (
+              <Pagination pages={pages} onPageChange={loadPostsPage} initialPage={presentPage} />
+            )}
+          </>
+        );
+      } else if (error !== null) {
+        postsView = <Alert variant="error"> {error} </Alert>;
+      }
+    } else if (success === null) {
+      postsView = <Spinner />;
     }
-
-    loadPostsPage = (page) => {
-        const { loadPostsByPage, postsPerPage } = this.props;
-        loadPostsByPage(page, postsPerPage);
-    }
-
-    render() {
-        const { posts, request, pages, presentPage } = this.props;
-        const { loadPostsPage } = this;
-        let { pagination } = this.props;
-
-        if(pagination === undefined) {
-            pagination = true
-        }
-
-        if(request.pending === false && request.error !== null && posts.length > 0) {
-            return <Alert variant='error' children={''}>Error: {request.error}</Alert>
-        } else if(request.pending === false && request.success === true && posts.length > 0) {
-            return (
-            <div>
-                <PostsList posts={posts} />
-                { pagination && <Pagination pages={pages} onPageChange={loadPostsPage} initialPage={presentPage}/> }
-            </div>
-            )
-        } else if(request.pending === true || request.success === null) {
-            return <Spinner />
-        } else if(request.pending === false && request.success === true && posts.length === 0) {
-            return <Alert variant='info' children={''}>No posts</Alert>
-        };
-    }
-};
+    return <div>{postsView}</div>;
+  }
+}
 
 Posts.propTypes = {
-    posts: PropTypes.arrayOf(
-        PropTypes.shape({
-            id: PropTypes.string.isRequired,
-            title: PropTypes.string.isRequired,
-            content: PropTypes.string.isRequired,
-            author: PropTypes.string.isRequired,
-        })
-    ),
-    loadPostsByPage: PropTypes.func.isRequired,
+  posts: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      title: PropTypes.string.isRequired,
+      author: PropTypes.string.isRequired,
+      content: PropTypes.string.isRequired,
+    }),
+  ).isRequired,
+  loadPostsByPage: PropTypes.func.isRequired,
 };
 
-Posts.defaultProps = {
-    initialPage: 1,
-    postsPerPage: 2,
-    pagination: true
-};
-
-export default withRouter(props => <Posts {...props} />);
+export default Posts;
